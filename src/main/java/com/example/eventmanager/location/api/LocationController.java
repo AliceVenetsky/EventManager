@@ -1,5 +1,7 @@
-package com.example.EventManager.location;
+package com.example.eventmanager.location.api;
 
+import com.example.eventmanager.location.domain.Location;
+import com.example.eventmanager.location.domain.LocationService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +28,8 @@ public class LocationController {
     }
 
     @PostMapping
-    public ResponseEntity<LocationDto>createLocation(
-            @RequestBody @Valid LocationDto locationDto)
-    {
+    public ResponseEntity<LocationDto> createLocation(
+            @RequestBody @Valid LocationDto locationDto) {
         log.info("Get request to create location from dto: {}", locationDto);
         var newLocation = locationService.createLocation(dtoConverter.toDomain(locationDto));
         return ResponseEntity
@@ -37,16 +38,16 @@ public class LocationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<LocationDto>>getAllLocations() {
+    public ResponseEntity<List<LocationDto>> getAllLocations() {
         log.info("Request for all location list");
-        List<Location>list = locationService.getAllLocations();
+        List<Location> list = locationService.getAllLocations();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(list.stream().map(dtoConverter::toDto).toList());
     }
 
     @GetMapping("/{locationId}")
-    public ResponseEntity<LocationDto>getLocationById(
+    public ResponseEntity<LocationDto> getLocationById(
             @PathVariable("locationId") Long id) {
         log.info("Get request to find location by id: {}", id);
         var foundLocation = locationService.getLocationById(id);
@@ -56,7 +57,7 @@ public class LocationController {
     }
 
     @DeleteMapping("/{locationId}")
-    public ResponseEntity<LocationDto>deleteLocation(
+    public ResponseEntity<LocationDto> deleteLocation(
             @PathVariable("locationId") Long id) {
         log.info("Get request to delete location with id: {}", id);
 
@@ -67,7 +68,7 @@ public class LocationController {
     }
 
     @PutMapping("/{locationId}")
-    public ResponseEntity<LocationDto>updateLocation(
+    public ResponseEntity<LocationDto> updateLocation(
             @PathVariable("locationId") Long id,
             @RequestBody @Valid LocationDto locationDto) {
         log.info("Get request to update location with id:{}", id);

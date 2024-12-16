@@ -1,4 +1,4 @@
-package com.example.EventManager.location;
+package com.example.eventmanager.location.db;
 
 import jakarta.persistence.*;
 
@@ -21,7 +21,8 @@ public class LocationEntity {
     @Column(name = "description")
     private String description;
 
-    public LocationEntity() {}
+    public LocationEntity() {
+    }
 
     public LocationEntity(
             Long id,

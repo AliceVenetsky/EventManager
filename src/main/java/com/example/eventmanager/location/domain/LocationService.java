@@ -1,5 +1,7 @@
-package com.example.EventManager.location;
+package com.example.eventmanager.location.domain;
 
+import com.example.eventmanager.location.db.LocationEntityConverter;
+import com.example.eventmanager.location.db.LocationRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,7 @@ public class LocationService {
 
 
     public Location createLocation(Location location) {
-        if(location.id() != null)
+        if (location.id() != null)
             throw new IllegalArgumentException(
                     "Can't create new location with id %s, id must be null".formatted(location.id())
             );
@@ -53,7 +55,7 @@ public class LocationService {
 
 
     public Location updateLocation(Long id, Location location) {
-        if(location.id() != null)
+        if (location.id() != null)
             throw new IllegalArgumentException("Id must be null");
 
         var updateLocation = entityConverter.toEntity(getLocationById(id));

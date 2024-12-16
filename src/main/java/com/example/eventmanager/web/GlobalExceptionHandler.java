@@ -1,10 +1,11 @@
-package com.example.EventManager.web;
+package com.example.eventmanager.web;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,9 +26,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ServerErrorDto> handleArgumentException(Exception e) {
         log.error("Get not valid exception", e);
         String detailedMessage = e instanceof MethodArgumentNotValidException ?
-                getValidationExceptionMessage((MethodArgumentNotValidException)e):e.getMessage();
+                getValidationExceptionMessage((MethodArgumentNotValidException) e) : e.getMessage();
 
-        var errorDto =  new ServerErrorDto(
+        var errorDto = new ServerErrorDto(
                 "Ошибка валидации",
                 detailedMessage,
                 LocalDateTime.now());
@@ -36,10 +37,10 @@ public class GlobalExceptionHandler {
                 .body(errorDto);
     }
 
-    @ExceptionHandler(value =  EntityNotFoundException.class)
+    @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<ServerErrorDto> handleNotFoundException(EntityNotFoundException e) {
         log.error("Get exception entity not found", e);
-        var errorDto =  new ServerErrorDto(
+        var errorDto = new ServerErrorDto(
                 "Сущность не найдена",
                 e.getMessage(),
                 LocalDateTime.now());
@@ -51,12 +52,24 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ServerErrorDto> handleGenericException(Exception e) {
         log.error("Get server exception", e);
-        var errorDto =  new ServerErrorDto(
+        var errorDto = new ServerErrorDto(
                 "Ошибка сервера",
                 e.getMessage(),
                 LocalDateTime.now());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorDto);
+    }
+
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<ServerErrorDto> handleBadCredentials(Exception e) {
+        log.error("Get bad credential exception", e);
+        var errorDto = new ServerErrorDto(
+                "Ошибка авторизации",
+                e.getMessage(),
+                LocalDateTime.now());
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(errorDto);
     }
 

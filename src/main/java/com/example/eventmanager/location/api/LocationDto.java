@@ -1,4 +1,4 @@
-package com.example.EventManager.location;
+package com.example.eventmanager.location.api;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
