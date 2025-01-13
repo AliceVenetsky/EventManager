@@ -1,6 +1,6 @@
 package com.example.eventmanager.user.api;
 
-import com.example.eventmanager.user.domain.AuthenticationServer;
+import com.example.eventmanager.user.domain.AuthenticationService;
 import com.example.eventmanager.user.domain.User;
 import com.example.eventmanager.user.domain.UserRegistrationService;
 import com.example.eventmanager.user.domain.UserService;
@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
 
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private final static Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
     private final UserRegistrationService registrationService;
-    private final AuthenticationServer authenticationServer;
+    private final AuthenticationService authenticationServer;
 
 
     public UserController(
             UserService userService,
             UserRegistrationService registrationService,
-            AuthenticationServer authenticationServer
+            AuthenticationService authenticationServer
     ) {
         this.userService = userService;
         this.registrationService = registrationService;

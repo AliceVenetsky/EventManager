@@ -74,11 +74,10 @@ public class GlobalExceptionHandler {
     }
 
     private String getValidationExceptionMessage(MethodArgumentNotValidException e) {
-        String detailedMessage = e.getBindingResult()
+        return e.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-        return detailedMessage;
     }
 }

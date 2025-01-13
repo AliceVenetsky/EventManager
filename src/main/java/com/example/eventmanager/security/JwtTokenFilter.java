@@ -1,5 +1,7 @@
 package com.example.eventmanager.security;
 
+import com.example.eventmanager.user.domain.User;
+import com.example.eventmanager.user.domain.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +24,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtTokenFilter.class);
     private final JwtTokenManager jwtTokenManager;
+    private final UserService userService;
 
-    public JwtTokenFilter(JwtTokenManager jwtTokenManager) {
+    public JwtTokenFilter(
+            JwtTokenManager jwtTokenManager,
+            UserService userService
+    ) {
         this.jwtTokenManager = jwtTokenManager;
+        this.userService = userService;
     }
 
     @Override
@@ -48,8 +55,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
         String login = jwtTokenManager.getLoginFromToken(token);
         String role = jwtTokenManager.getRoleFromToken(token);
+        User user = userService.getUserByLogin(login);
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                login,
+                user,
                 null,
                 List.copyOf(Collections.singleton(new SimpleGrantedAuthority(role)))
         );

@@ -3,17 +3,18 @@ package com.example.eventmanager.user.domain;
 import com.example.eventmanager.security.JwtTokenManager;
 import com.example.eventmanager.user.api.SignInRequest;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticationServer {
+public class AuthenticationService {
 
     private final JwtTokenManager jwtTokenManager;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
-    public AuthenticationServer(
+    public AuthenticationService(
             JwtTokenManager jwtTokenManager,
             PasswordEncoder passwordEncoder,
             UserService userService
@@ -33,5 +34,9 @@ public class AuthenticationServer {
             throw new BadCredentialsException("Problem with password");
 
         return jwtTokenManager.generateJwtToken(user);
+    }
+
+    public User getCurrentUser() {
+        return (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

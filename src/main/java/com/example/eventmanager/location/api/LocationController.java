@@ -17,7 +17,7 @@ public class LocationController {
 
     private final LocationService locationService;
     private final LocationDtoConverter dtoConverter;
-    private final Logger log = LoggerFactory.getLogger(LocationController.class);
+    private final static Logger log = LoggerFactory.getLogger(LocationController.class);
 
     public LocationController(
             LocationService locationService,
