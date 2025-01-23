@@ -1,13 +1,9 @@
 package com.example.eventmanager.event.db;
 
-import com.example.eventmanager.event.domain.Event;
-import com.example.eventmanager.event.domain.EventService;
-import com.example.eventmanager.event.domain.EventStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Repository;
 

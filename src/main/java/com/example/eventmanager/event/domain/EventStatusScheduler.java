@@ -20,7 +20,7 @@ public class EventStatusScheduler {
 
     @Scheduled(fixedDelay = 1000)
     public void updateEventsStatus() {
-        log.info("Event status scheduler update event");
+       // log.info("Event status scheduler update event");
         var startedEvents = eventRepository.findStartedEventsWithStatus(EventStatus.WAIT_START.name());
         startedEvents.forEach(eventId -> eventRepository.changeEventStatus(eventId, EventStatus.STARTED.name()));
 

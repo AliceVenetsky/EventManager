@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public record EventUpdateRequestDto(
-        @NotBlank(message = "Name can't be empty")
         String name,
         @Positive(message = "Maximum places must be greater then null")
         Integer maxPlaces,
@@ -15,7 +14,6 @@ public record EventUpdateRequestDto(
         Integer cost,
         @Min(value = 30, message = "Duration must be more than 30 minutes")
         Integer duration,
-        @NotNull(message = "Location ID must not be null")
         Long locationId
 ) {
 }
