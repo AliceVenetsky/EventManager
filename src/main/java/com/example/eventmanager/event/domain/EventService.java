@@ -26,17 +26,20 @@ public class EventService {
     private final LocationService locationService;
     private final AuthenticationService authenticationService;
     private final EventEntityConverter entityConverter;
+    private final NotificationService notificationService;
 
     public EventService(
             EventRepository eventRepository,
             LocationService locationService,
             AuthenticationService authenticationService,
-            EventEntityConverter entityConverter
+            EventEntityConverter entityConverter,
+            NotificationService notificationService
     ) {
         this.eventRepository = eventRepository;
         this.locationService = locationService;
         this.authenticationService = authenticationService;
         this.entityConverter = entityConverter;
+        this.notificationService = notificationService;
     }
 
     public Event createEvent(EventCreateRequestDto createRequestDto) {
@@ -78,6 +81,7 @@ public class EventService {
             return;
 
         eventRepository.changeEventStatus(eventId, EventStatus.CANCELED.name());
+        notificationService.changeEventStatus(eventId, EventStatus.CANCELED);
 
     }
 
@@ -90,7 +94,7 @@ public class EventService {
         checkEventNotStarted(EventStatus.valueOf(updateEvent.getStatus()));
 
 
-        if(updateRequestDto.maxPlaces() != null || updateRequestDto.locationId() != null) {
+        if (updateRequestDto.maxPlaces() != null || updateRequestDto.locationId() != null) {
 
             var locationId = Optional.ofNullable(updateRequestDto.locationId())
                     .orElse(updateEvent.getLocationId());
@@ -101,11 +105,13 @@ public class EventService {
                 throw new IllegalArgumentException("Capacity %s of location is less then max places %s"
                         .formatted(location.capacity(), maxPlaces));
         }
-        if(updateRequestDto.maxPlaces() != null
+        if (updateRequestDto.maxPlaces() != null
                 && updateEvent.getRegistrationList().size() > updateRequestDto.maxPlaces()) {
             throw new IllegalArgumentException("Registrations %s is more than max places %s"
                     .formatted(updateEvent.getRegistrationList().size(), updateRequestDto.maxPlaces()));
         }
+        notificationService.changeEventFields(updateEvent, updateRequestDto);
+
         Optional.ofNullable(updateRequestDto.name())
                 .ifPresent(updateEvent::setName);
         Optional.ofNullable(updateRequestDto.maxPlaces())
@@ -149,7 +155,7 @@ public class EventService {
                 searchDto.durationMin(),
                 searchDto.durationMax(),
                 searchDto.locationId(),
-                searchDto.eventStatus() != null ? searchDto.eventStatus().name():null
+                searchDto.eventStatus() != null ? searchDto.eventStatus().name() : null
         );
         return events.stream().map(entityConverter::toDomain).toList();
     }

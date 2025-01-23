@@ -1286,7 +1286,7 @@ components:
         age:
           description: возраст пользователя
           minimum: 0
-          type: int
+          type: integer
         role:
           description: Роль пользователя
           enum:
@@ -1315,7 +1315,7 @@ components:
         age:
           description: Возраст пользователя
           minimum: 18
-          type: int
+          type: integer
       required:
       - age
       - login
@@ -1387,7 +1387,7 @@ components:
           description: Стоимость в рублях
           example: 1200
           minimum: 0
-          type: decimal
+          type: integer
         duration:
           description: Длительность в минутах
           example: 60
@@ -1494,7 +1494,7 @@ components:
           description: Новая стоимость мероприятия в рублях
           example: 3000
           minimum: 0
-          type: decimal
+          type: integer
         duration:
           description: Новая длительность в минутах
           example: 60
